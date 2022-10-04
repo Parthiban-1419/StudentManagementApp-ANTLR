@@ -1,13 +1,16 @@
 package com.es;
 
-
-import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.xpath.XPathLexer;
 import org.apache.http.HttpHost;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.surround.parser.QueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -55,13 +58,8 @@ public class LogManager{
 		BufferedTokenStream bts = new BufferedTokenStream(tSource);
 		System.out.println(bts.getTokenSource().getInputStream());
 
-
+		QueryParser qp = new QueryParser();
 		return true;
-	}
-
-	void antler(){
-		String javaClassContent = "public class SampleClass { void DoSomething(){} }";
-//		Java8Lexer java8Lexer = new Java8Lexer(CharStreams.fromString(javaClassContent));
 	}
 
 	public String putLog(JSONObject json) throws IOException {

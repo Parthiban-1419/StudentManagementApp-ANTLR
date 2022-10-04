@@ -1,4 +1,4 @@
-grammar logAntlr;
+grammar Log;
 
 fragment DIGIT : [0-9];
 fragment TWODIGIT : DIGIT DIGIT;
@@ -9,6 +9,7 @@ TIME : TWODIGIT ':' TWODIGIT ':' TWODIGIT;
 TEXT   : LETTER+ ;
 CRLF : '\r'? '\n' | '\r';
 
+
 log : entry+;
 entry : timestamp ' ' level ' ' message CRLF;
 
@@ -17,3 +18,7 @@ timestamp : DATE ' ' TIME;
 level : 'ERROR' | 'INFO' | 'DEBUG';
 
 message : (TEXT | ' ')+;
+
+
+
+
