@@ -1,19 +1,29 @@
 package com.es;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.BufferedTokenStream;
-import org.antlr.v4.runtime.TokenSource;
-import org.antlr.v4.runtime.TokenStream;
+import com.antlr.AntlrQueryLexer;
+import com.antlr.AntlrQueryParser;
+import com.antlr.MyListener;
+import com.query.QueryLexer;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.xpath.XPathLexer;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHost;
+
+//import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.surround.parser.CharStream;
 import org.apache.lucene.queryparser.surround.parser.QueryParser;
+import org.apache.lucene.queryparser.surround.parser.ParseException;
+import org.apache.lucene.queryparser.surround.query.BasicQueryFactory;
+import org.apache.lucene.queryparser.surround.query.SrndQuery;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -28,7 +38,6 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -47,8 +56,7 @@ public class LogManager{
 
 	public static void main(String[] args) throws Exception {
 		LogManager log = new LogManager("crud-log");
-		System.out.println(log.getParser());
-		System.out.println(log.luceneSearch("operation", "*"));
+		System.out.println(log.getDataByLucene("userId = 'p20' & operation = 'login' | operation = 'logout'"));//""operation = 'create' and userId = 'p2000' OR operation = 'view' and userId = 'p2000'"));
 	}
 	public boolean getParser(){
 		ANTLRInputStream ais= new ANTLRInputStream("login AND logout");
@@ -61,7 +69,6 @@ public class LogManager{
 		QueryParser qp = new QueryParser();
 		return true;
 	}
-
 	public String putLog(JSONObject json) throws IOException {
 		IndexRequest indexRequest = new IndexRequest(index);
 		indexRequest.source(json.toString(), XContentType.JSON);
@@ -69,7 +76,6 @@ public class LogManager{
 
 		return indexResponse.getResult().name();
 	}
-
 	public Object checkLog(String key, Object value) throws IOException {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.indices(index);
@@ -78,7 +84,6 @@ public class LogManager{
 		System.out.println("hits : " + searchResponse.getHits().getTotalHits().value);
 		return (searchResponse.getHits().getTotalHits().value > 0) ? true : false;
 	}
-
 	public JSONArray getLog(String key, Object value) throws Exception {
 		JSONArray jArray = new JSONArray();
 		JSONParser parser = new JSONParser();
@@ -89,7 +94,6 @@ public class LogManager{
 		}
 		return jArray;
 	}
-
 	public JSONArray luceneSearch(String field, Object value) throws Exception {
 		Directory directory = FSDirectory.open(Paths.get("D:/ES/elasticsearch-7.9.2/data/nodes/0/indices/a9KuzLkPSBiZiJgxdKUNQA/0/index"));
 		IndexReader reader = DirectoryReader.open(directory);
@@ -100,7 +104,7 @@ public class LogManager{
 		System.out.println("max doc : '" + reader.maxDoc() + "' term : '" + term + "' query : '" + query + "' hits in luceneSearch : " + hits.totalHits.value);
 		return getResult(hits);
 	}
-	public JSONArray getResult(TopDocs hits) throws IOException, ParseException {
+	public JSONArray getResult(TopDocs hits) throws IOException, org.json.simple.parser.ParseException {
 		JSONArray jArray = new JSONArray();
 		JSONParser parser = new JSONParser();
 		JSONObject json;
@@ -112,10 +116,46 @@ public class LogManager{
 			json = (JSONObject) parser.parse(new String(bytes));
 			jArray.add(json);
 		}
-		System.out.println(jArray);
+//		System.out.println(jArray);
 		return jArray;
 	}
+	public JSONArray getDataByLucene(String myQuery) throws ParseException, IOException, org.json.simple.parser.ParseException {
+		Directory directory = FSDirectory.open(Paths.get("D:/ES/elasticsearch-7.9.2/data/nodes/0/indices/a9KuzLkPSBiZiJgxdKUNQA/0/index"));
+		IndexReader reader = DirectoryReader.open(directory);
+		indexSearcher = new IndexSearcher(reader);
+		System.out.println(myQuery);
+		Query query = QueryParser.parse(getAntlrQuery(myQuery)).makeLuceneQueryField("*", new BasicQueryFactory());  // SrndQuery
+		TopDocs hits = indexSearcher.search(query, reader.maxDoc());
+		System.out.println("maxDoc : " + reader.maxDoc() + " hits : " + hits.totalHits.value);
+		return getResult(hits);
+	}
+
+	public String getAntlrQuery(String input) {
+		TokenSource tokenSource = new AntlrQueryLexer(CharStreams.fromString(input));
+		CommonTokenStream tokens = new CommonTokenStream(tokenSource);
+		AntlrQueryParser parser = new AntlrQueryParser(tokens);
+		MyListener listener  = new MyListener();
+		AntlrQueryParser.OrQueryContext tree = parser.orQuery();
+		ParseTreeWalker.DEFAULT.walk(listener, tree);
+		System.out.println(listener.result);
+		return listener.result;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -197,7 +237,7 @@ public JSONArray luceneSearch(String field, long from, long to) throws Exception
 		System.out.println("max doc : '" + reader.maxDoc() + "' query : '" + query + "' hits in luceneSearch : " + hits.totalHits.value);
 		return getResult(hits);
 	}
- */
+
 
 
 
@@ -308,5 +348,5 @@ public JSONArray luceneSearch(String field, long from, long to) throws Exception
 //		return documents;
 //	}
 
-
+*/
 	

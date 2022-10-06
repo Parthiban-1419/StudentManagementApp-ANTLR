@@ -19,17 +19,13 @@ public class Logs extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		try {
 			LogManager log = new LogManager(request.getParameter("index"));
-			String jString = request.getParameter("jArray"), field = request.getParameter("field"), value = request.getParameter("query");
+			String jString = request.getParameter("jArray"), query = request.getParameter("query");
 
 //			else
 //				log.luceneSearch(request.getParameter("field"), request.getParameter("query"), request.getParameter("endValue"));
-			System.out.println(field + " : " + value+"*");
+			System.out.println(query);
 			if(jString == null) {
-				if(field == null )
-					field = "*";
-				if(value == null)
-					value = "*";
-				out.print(log.luceneSearch(field, value+"*"));
+				out.print(log.getDataByLucene(query));
 			}
 			else{
 				JSONArray jArray = (JSONArray) new JSONParser().parse(jString);

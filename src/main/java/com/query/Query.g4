@@ -1,15 +1,15 @@
 grammar Query;
 
-query : orExpression EOF;
+query : orExpression | EOF;
 orExpression : andExpression (OR andExpression)*;
 andExpression : expression (AND expression)*;
 expression : ATTRIBUTE COMPARISON VALUE;
 
-OR : 'OR';
-AND : 'AND';
+OR : 'OR' | '|' | 'or';
+AND : 'AND' | '&' | '&&' | 'and';
 
 COMPARISON : GREATER | LESSER | EQUAL | GREATER EQUAL | LESSER EQUAL | NOT EQUAL;
-VALUE : QUOTE VAL+  QUOTE ;
+VALUE : '\'' VAL+  '\'' ;
 ATTRIBUTE : LETTER+;
 WHITESPACE : (' ' | '\t' | '\n' | '\r')+ -> skip;
 
