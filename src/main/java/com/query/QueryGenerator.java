@@ -2,12 +2,6 @@ package com.query;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
-import org.antlr.v4.runtime.tree.ParseTree;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class QueryGenerator extends QueryBaseListener{
 
     public static void main(String[] args) {

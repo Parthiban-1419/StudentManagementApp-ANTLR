@@ -3,23 +3,21 @@ package com.es;
 import com.antlr.AntlrQueryLexer;
 import com.antlr.AntlrQueryParser;
 import com.antlr.MyListener;
-import com.query.QueryLexer;
+import com.antlr.MyVisitor;
+
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.xpath.XPathLexer;
-import org.apache.commons.io.IOUtils;
+
 import org.apache.http.HttpHost;
 
-//import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryparser.surround.parser.CharStream;
-import org.apache.lucene.queryparser.surround.parser.QueryParser;
 import org.apache.lucene.queryparser.surround.parser.ParseException;
+import org.apache.lucene.queryparser.surround.parser.QueryParser;
 import org.apache.lucene.queryparser.surround.query.BasicQueryFactory;
-import org.apache.lucene.queryparser.surround.query.SrndQuery;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -35,6 +33,7 @@ import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -56,7 +55,7 @@ public class LogManager{
 
 	public static void main(String[] args) throws Exception {
 		LogManager log = new LogManager("crud-log");
-		System.out.println(log.getDataByLucene("userId = 'p20' & operation = 'login' | operation = 'logout'"));//""operation = 'create' and userId = 'p2000' OR operation = 'view' and userId = 'p2000'"));
+		System.out.println(log.getDataByLucene("(operation  = 'login') OR (operation = 'logout') and (userId != 'p2000') or a > 10 | (b [10 to 20] OR c from 10 to 20)"));//""operation = 'create' and userId = 'p2000' OR operation = 'view' and userId = 'p2000'"));
 	}
 	public boolean getParser(){
 		ANTLRInputStream ais= new ANTLRInputStream("login AND logout");
@@ -123,7 +122,6 @@ public class LogManager{
 		Directory directory = FSDirectory.open(Paths.get("D:/ES/elasticsearch-7.9.2/data/nodes/0/indices/a9KuzLkPSBiZiJgxdKUNQA/0/index"));
 		IndexReader reader = DirectoryReader.open(directory);
 		indexSearcher = new IndexSearcher(reader);
-		System.out.println(myQuery);
 		Query query = QueryParser.parse(getAntlrQuery(myQuery)).makeLuceneQueryField("*", new BasicQueryFactory());  // SrndQuery
 		TopDocs hits = indexSearcher.search(query, reader.maxDoc());
 		System.out.println("maxDoc : " + reader.maxDoc() + " hits : " + hits.totalHits.value);
@@ -134,10 +132,11 @@ public class LogManager{
 		TokenSource tokenSource = new AntlrQueryLexer(CharStreams.fromString(input));
 		CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 		AntlrQueryParser parser = new AntlrQueryParser(tokens);
-		MyListener listener  = new MyListener();
-		AntlrQueryParser.OrQueryContext tree = parser.orQuery();
+		MyListener  listener  = new MyListener ();
+		AntlrQueryParser.AntlrQueryContext tree = parser.antlrQuery();
 		ParseTreeWalker.DEFAULT.walk(listener, tree);
-		System.out.println(listener.result);
+		System.out.println(input);
+		System.out.println(listener.result + "\n");
 		return listener.result;
 	}
 }

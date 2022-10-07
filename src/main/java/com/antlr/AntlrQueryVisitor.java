@@ -41,6 +41,12 @@ public interface AntlrQueryVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpression(AntlrQueryParser.ExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link AntlrQueryParser#orValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOrValue(AntlrQueryParser.OrValueContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link AntlrQueryParser#andValue}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -52,4 +58,28 @@ public interface AntlrQueryVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitValue(AntlrQueryParser.ValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AntlrQueryParser#rangeValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRangeValue(AntlrQueryParser.RangeValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AntlrQueryParser#number}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumber(AntlrQueryParser.NumberContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AntlrQueryParser#separator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSeparator(AntlrQueryParser.SeparatorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link AntlrQueryParser#field}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitField(AntlrQueryParser.FieldContext ctx);
 }

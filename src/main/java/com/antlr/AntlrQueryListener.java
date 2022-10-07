@@ -58,6 +58,16 @@ public interface AntlrQueryListener extends ParseTreeListener {
 	 */
 	void exitExpression(AntlrQueryParser.ExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link AntlrQueryParser#orValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterOrValue(AntlrQueryParser.OrValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AntlrQueryParser#orValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitOrValue(AntlrQueryParser.OrValueContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link AntlrQueryParser#andValue}.
 	 * @param ctx the parse tree
 	 */
@@ -77,4 +87,44 @@ public interface AntlrQueryListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitValue(AntlrQueryParser.ValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AntlrQueryParser#rangeValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterRangeValue(AntlrQueryParser.RangeValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AntlrQueryParser#rangeValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitRangeValue(AntlrQueryParser.RangeValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AntlrQueryParser#number}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumber(AntlrQueryParser.NumberContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AntlrQueryParser#number}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumber(AntlrQueryParser.NumberContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AntlrQueryParser#separator}.
+	 * @param ctx the parse tree
+	 */
+	void enterSeparator(AntlrQueryParser.SeparatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AntlrQueryParser#separator}.
+	 * @param ctx the parse tree
+	 */
+	void exitSeparator(AntlrQueryParser.SeparatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link AntlrQueryParser#field}.
+	 * @param ctx the parse tree
+	 */
+	void enterField(AntlrQueryParser.FieldContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link AntlrQueryParser#field}.
+	 * @param ctx the parse tree
+	 */
+	void exitField(AntlrQueryParser.FieldContext ctx);
 }
