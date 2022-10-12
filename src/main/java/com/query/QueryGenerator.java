@@ -6,7 +6,7 @@ public class QueryGenerator extends QueryBaseListener{
 
     public static void main(String[] args) {
         QueryGenerator generator = new QueryGenerator();
-        System.out.println(generator.getAntlrQuery("operator = 'view'"));;
+        System.out.println(generator.getAntlrQuery("operator = 'view' | operation = 'login'"));;
     }
     public String getAntlrQuery(String query){
         QueryLexer lexer = new QueryLexer(CharStreams.fromString(query));
@@ -15,6 +15,8 @@ public class QueryGenerator extends QueryBaseListener{
         MyListener listener = new MyListener();
         QueryParser.QueryContext tree = parser.query();
         ParseTreeWalker.DEFAULT.walk(listener, tree);
+        MyVisitor visitor = new MyVisitor();
+        System.out.println(visitor.visit(tree));
         return listener.result;
     }
 }

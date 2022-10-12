@@ -16,10 +16,11 @@ public class JsonEngine {
         JsonParser.JsonContext tree = parser.json();
         ParseTreeWalker walker = ParseTreeWalker.DEFAULT;
         MyListener listener = new  MyListener();
+        MyVisitor visitor = new MyVisitor();
         parser.addParseListener(listener);
         walker.walk(listener, tree);
         System.out.println(Arrays.asList(parser.getRuleNames()));
-        System.out.println(parser.json().toStringTree(Arrays.asList(parser.getRuleNames())));
+        System.out.println(visitor.visit(tree));
     }
 
 

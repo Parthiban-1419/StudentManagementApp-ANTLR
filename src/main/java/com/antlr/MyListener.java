@@ -1,61 +1,71 @@
 package com.antlr;
 
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
-
 import java.util.List;
 
 public class MyListener implements AntlrQueryListener {
     public String result = "";
-    boolean range = false;
+    boolean range = false, contains = false;
 
     @Override
     public void enterAntlrQuery(AntlrQueryParser.AntlrQueryContext ctx) {
-//        AntlrQueryParser.OrQueryContext nodeList = ctx.orQuery();
-//        System.out.println("size : " + nodeList.size());
-//        for(int i=0; i<nodeList.size(); i++)
-//            System.out.println("OR -----> " + nodeList.get(i).getText() + "********");
+        System.out.println("Antlr ----> " + ctx.getText() + " chid count : " + ctx.getChildCount());
     }
 
     @Override
-    public void exitAntlrQuery(AntlrQueryParser.AntlrQueryContext ctx) {
-
-    }
+    public void exitAntlrQuery(AntlrQueryParser.AntlrQueryContext ctx) {}
 
     @Override
     public void enterOrQuery(AntlrQueryParser.OrQueryContext ctx) {
-        System.out.println("orQuery : " + ctx.getText() + " count : " + ctx.getChildCount());
-//        if(ctx.getChildCount() > 1) {
-//            System.out.println(ctx.getText());
-//            for(int i=0; i<ctx.getChildCount(); i+=2) {
-//                System.out.println(i + "\t\tchild ---->" + ctx.getChild(i).getText() + " count : " + ctx.getChild(i).getChildCount() + " token : " + ctx.getToken(5, i));
-//            }
-//        }
-//        System.out.println();
-//
-//        for(AntlrQueryParser.AndQueryContext node : nodeList)
-//            System.out.println(nodeList.equals(node));
+        System.out.println("Enter orQuery ---> " + ctx.getText() + " count : " + ctx.getChildCount());
+        AntlrQueryParser.ExpressionContext currentExpression;
+        AntlrQueryParser.ExpressionContext matchedExpression;
+
+        for(int i=0; i<ctx.getChildCount(); i++){
+            if(ctx.getChild(i).getChildCount() == 1 && ctx.getChild(i).getChild(0) instanceof AntlrQueryParser.QueryContext) {
+                for(int j = i+1; j < ctx.getChildCount(); j++){
+                    if(ctx.getChild(j).getChildCount() == 1 && ctx.getChild(j).getChild(0) instanceof AntlrQueryParser.QueryContext ){
+                        currentExpression = ((AntlrQueryParser.QueryContext) ctx.getChild(i).getChild(0)).expression();
+                        matchedExpression = ((AntlrQueryParser.QueryContext) ctx.getChild(j).getChild(0)).expression();
+                        if(currentExpression != null && matchedExpression != null && matchedExpression.field().getText().equals(currentExpression.field().getText())){
+                            TokenSource tokenSource = new AntlrQueryLexer(CharStreams.fromString(currentExpression.field().getText() + "( "  + currentExpression.orValue().getText() + " | " +  matchedExpression.orValue().getText() + ") "));
+                            CommonTokenStream tokens = new CommonTokenStream(tokenSource);
+                            AntlrQueryParser parser = new AntlrQueryParser(tokens);
+                            ((AntlrQueryParser.QueryContext) ctx.getChild(i).getChild(0)).removeLastChild();
+                            ctx.children.remove(j);
+                            ctx.children.remove(j-1);
+                            ((AntlrQueryParser.QueryContext) ctx.getChild(i).getChild(0)).addChild(parser.expression());
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
     public void exitOrQuery(AntlrQueryParser.OrQueryContext ctx) {
-
+        System.out.println("Exit orQuery ---> " + ctx.getText() + " count : " + ctx.getChildCount());
     }
 
     @Override
     public void enterAndQuery(AntlrQueryParser.AndQueryContext ctx) {
-        System.out.println("andQuery : " + ctx.getText() + " childCount : " + ctx.getChildCount());
+        System.out.println("\tEnter andQuery : " + ctx.getText() + " childCount : " + ctx.getChildCount());
     }
 
     @Override
     public void exitAndQuery(AntlrQueryParser.AndQueryContext ctx) {
+        System.out.println("\tExit andQuery : " + ctx.getText() + " childCount : " + ctx.getChildCount());
 
     }
 
     @Override
     public void enterQuery(AntlrQueryParser.QueryContext ctx) {
-        System.out.println("childCount : " + ctx.getChildCount() + " Query : " + ctx.getText());
+        System.out.println("\t\tEnter Query childCount : " + ctx.getChildCount() + " Query : " + ctx.getText());
 //        if(ctx.getChildCount() > 1) {
 //            for (int i = 0; i < ctx.getChildCount(); i++)
 //                if(ctx.getChild(i).getChildCount() > 2) {
@@ -67,6 +77,7 @@ public class MyListener implements AntlrQueryListener {
 
     @Override
     public void exitQuery(AntlrQueryParser.QueryContext ctx) {
+        System.out.println("\t\tExit query childCount : " + ctx.getChildCount() + " Query : " + ctx.getText());
 
     }
 
@@ -76,12 +87,11 @@ public class MyListener implements AntlrQueryListener {
     }
 
     @Override
-    public void exitExpression(AntlrQueryParser.ExpressionContext ctx) {
-
-    }
+    public void exitExpression(AntlrQueryParser.ExpressionContext ctx) {}
 
     @Override
     public void enterSeparator(AntlrQueryParser.SeparatorContext ctx) {
+        ctx.SEPERATOR();
 
     }
 
@@ -138,7 +148,7 @@ public class MyListener implements AntlrQueryListener {
     public void exitRangeValue(AntlrQueryParser.RangeValueContext ctx) {
         List<TerminalNode> list = ctx.getTokens(16);
         if(!list.isEmpty())
-            result += ": [ "  + list.get(0).getSymbol().getText() + " TO " + list.get(1).getSymbol().getText() + " ] ";
+            result += " [ "  + list.get(0).getSymbol().getText() + " TO " + list.get(1).getSymbol().getText() + " ] ";
         range = false;
     }
 
@@ -167,48 +177,50 @@ public class MyListener implements AntlrQueryListener {
         String str;
         if(!range)
             switch (terminalNode.getSymbol().getType()){
-            case 2:
-            case 3:
-                result += ": ";
-                break;
-            case 4:
-            case 5:
-                result += "NOT ";
-                break;
-            case 6:
-                result += "OR ";
-                break;
-            case 7:
-                result += "AND ";
-                break;
-            case 9:
-                result += "( " ;
-                break;
-            case 10:
-                result += ") " ;
-                break;
-            case 16:
-            case 18:
-            case 19:
-                if(terminalNode.getText().charAt(0) == '\'')
-                    str = terminalNode.getText().substring(1, terminalNode.getText().length()-1) + " ";
-                else
-                    str = terminalNode.getText() + " ";
-                result += str;
-                break;
-            case 22:
-                result += "> ";
-                break;
-            case 23:
-                  result += ">= ";
-                  break;
-            case 25:
-                result += "< ";
-                break;
-            case 26:
-                result += "<= ";
-                break;
-            default:
+                case 1:
+                    contains = true;
+                    System.out.println(terminalNode.getText() + " contains....................");
+                    break;
+                case 4:
+                case 5:
+                    result += "NOT ";
+                    break;
+                case 6:
+                    result += "OR ";
+                    break;
+                case 7:
+                    result += "AND ";
+                    break;
+                case 9:
+                    result += "( " ;
+                    break;
+                case 10:
+                    result += ") " ;
+                    break;
+                case 16:
+                    result += terminalNode.getText() + " ";
+                    break;
+                case 18:
+                    result += terminalNode.getText().substring(1, terminalNode.getText().length()-1).toLowerCase();
+                    result += (contains) ? "* " : " ";
+                    contains = false;
+                    break;
+                case 19:
+                    result += terminalNode.getText() + " : ";
+                    break;
+                case 22:
+                    result += "> ";
+                    break;
+                case 23:
+                      result += ">= ";
+                      break;
+                case 25:
+                    result += "< ";
+                    break;
+                case 26:
+                    result += "<= ";
+                    break;
+                default:
 
         }
     }

@@ -21,6 +21,8 @@ public class MyListener implements  QueryListener{
     }
 
     @Override public void enterOrExpression(QueryParser.OrExpressionContext ctx) {
+
+//        ctx.OR().clear();
 //        List<QueryParser.AndExpressionContext> nodes= ctx.andExpression();
 ////        for(QueryParser.AndExpressionContext node : nodes) {
 ////            System.out.println(node.getText());

@@ -55,7 +55,7 @@ public class LogManager{
 
 	public static void main(String[] args) throws Exception {
 		LogManager log = new LogManager("crud-log");
-		System.out.println(log.getDataByLucene("(operation  = 'login') OR (operation = 'logout') and (userId != 'p2000') or a > 10 | (b [10 to 20] OR c from 10 to 20)"));//""operation = 'create' and userId = 'p2000' OR operation = 'view' and userId = 'p2000'"));
+		System.out.println(log.getDataByLucene("operation = 'login' "));//""operation = 'create' and userId = 'p2000' OR operation = 'view' and userId = 'p2000'"));
 	}
 	public boolean getParser(){
 		ANTLRInputStream ais= new ANTLRInputStream("login AND logout");
@@ -135,8 +135,8 @@ public class LogManager{
 		MyListener  listener  = new MyListener ();
 		AntlrQueryParser.AntlrQueryContext tree = parser.antlrQuery();
 		ParseTreeWalker.DEFAULT.walk(listener, tree);
-		System.out.println(input);
-		System.out.println(listener.result + "\n");
+		System.out.println("Query from user : \n\t\t" + input);
+		System.out.println("Query from ANTLR : \n\t\t" + listener.result + "\n");
 		return listener.result;
 	}
 }

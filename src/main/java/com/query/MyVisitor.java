@@ -1,5 +1,7 @@
 package com.query;
 
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.RuleNode;
 
 public class MyVisitor extends QueryBaseVisitor<String>{
@@ -15,6 +17,10 @@ public class MyVisitor extends QueryBaseVisitor<String>{
 //                result += visitOrExpression(ctx.orExpression());
 //        }
         System.out.println("visiting query...");
+        QueryLexer lexer = new QueryLexer(CharStreams.fromString("a = '10'"));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        QueryParser parser = new QueryParser(tokens);
+        MyListener listener = new MyListener();
         return ctx.orExpression() == null ? "" : "( " + this.visitOrExpression(ctx.orExpression()) + " )";
     }
 
@@ -22,8 +28,8 @@ public class MyVisitor extends QueryBaseVisitor<String>{
     public String visitOrExpression(QueryParser.OrExpressionContext ctx) {
 //
         String result = "";
-        for(int i=0; i< ctx.getChildCount(); i++)
-            result += visitAndExpression(ctx.andExpression().get(0));
+        for(QueryParser.AndExpressionContext andExpQuery : ctx.andExpression())
+            result += visitAndExpression(andExpQuery);
 
         return result;
     }

@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 public class AntlrQueryGenerator {
     public static void main(String[] args) {
         AntlrQueryGenerator generator = new AntlrQueryGenerator();
-        System.out.println(generator.getAntlrQuery("operation > 10 | operation < 9 | operation = 10"));
+        System.out.println(generator.getAntlrQuery("b = 90 , a = 'li' | a = 'lo'"));
     }
 
     public String getAntlrQuery(String input) {
@@ -16,12 +16,9 @@ public class AntlrQueryGenerator {
         CommonTokenStream tokens = new CommonTokenStream(tokenSource);
         AntlrQueryParser parser = new AntlrQueryParser(tokens);
         MyListener  listener  = new MyListener ();
-        MyVisitor visitor = new MyVisitor();
-        parser.addParseListener(listener);
         AntlrQueryParser.OrQueryContext tree = parser.orQuery();
-//        System.out.println(visitor.visit(tree));;
-//        ParseTreeWalker.DEFAULT.walk(listener, tree);
-//        System.out.println(input);
+        ParseTreeWalker.DEFAULT.walk(listener, tree);
+        System.out.println(input);
         return listener.result;
     }
 }

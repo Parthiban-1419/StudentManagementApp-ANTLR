@@ -23,6 +23,7 @@ public class Logs extends HttpServlet {
 
 //			else
 //				log.luceneSearch(request.getParameter("field"), request.getParameter("query"), request.getParameter("endValue"));
+
 			System.out.println(query);
 			if(jString == null) {
 				out.print(log.getDataByLucene(query));
