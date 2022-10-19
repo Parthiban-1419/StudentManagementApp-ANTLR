@@ -15,17 +15,18 @@ public class LogParser {
     public static void main(String[] args) throws IOException {
         JSONArray jArray = new JSONArray();
         LogParser parser = new LogParser();
-        Scanner scanner = new Scanner(System.in);
         File file = new File("mysql_error");
+        Scanner scanner = new Scanner(file);
 
-        jArray.add(parser.parseLog(file));
+        while(scanner.hasNext())
+            jArray.add(parser.parseLog(scanner.nextLine()));
 
         System.out.println(jArray);
     }
 
 
-    public JSONObject parseLog(File file) throws IOException {
-        TokenSource tokenSource = new SqlLogLexer(CharStreams.fromFileName(file.getAbsolutePath()));
+    public JSONObject parseLog(String log) throws IOException {
+        TokenSource tokenSource = new SqlLogLexer(CharStreams.fromString(log));
         CommonTokenStream tokens = new CommonTokenStream(tokenSource);
         SqlLogParser parser = new SqlLogParser(tokens);
         LogListener listener = new LogListener();

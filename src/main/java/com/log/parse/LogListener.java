@@ -102,6 +102,13 @@ public class LogListener extends SqlLogBaseListener{
     @Override
     public void exitMessage(SqlLogParser.MessageContext ctx) { }
 
+    @Override public void enterUserName(SqlLogParser.UserNameContext ctx) {
+        result.put("userName", ctx.getText());
+    }
+
+
+    @Override public void exitUserName(SqlLogParser.UserNameContext ctx) { }
+
 
 
     @Override

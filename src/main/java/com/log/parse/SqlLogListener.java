@@ -77,4 +77,14 @@ public interface SqlLogListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMessage(SqlLogParser.MessageContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SqlLogParser#userName}.
+	 * @param ctx the parse tree
+	 */
+	void enterUserName(SqlLogParser.UserNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SqlLogParser#userName}.
+	 * @param ctx the parse tree
+	 */
+	void exitUserName(SqlLogParser.UserNameContext ctx);
 }

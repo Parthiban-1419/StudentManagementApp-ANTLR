@@ -95,6 +95,18 @@ public class SqlLogBaseListener implements SqlLogListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMessage(SqlLogParser.MessageContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUserName(SqlLogParser.UserNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUserName(SqlLogParser.UserNameContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

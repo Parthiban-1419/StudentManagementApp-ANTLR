@@ -9,9 +9,8 @@ key : ALPHANUMERIC ;
 comparisonOperator :  '=' | '!=' | '>'| '>=' | '<' | '<=' |  CONTAINS | MATCHES | ENDS_WITH | STARTS_WITH ;
 value : BOOLEAN | INTEGER | DOUBLE | NULL | STRING ;
 
-
-INTEGER : [0-9]{8} ;
-DOUBLE :  ;
+INTEGER : [0-9]+ ;
+DOUBLE : [0-9]+ ;
 NULL : ('N' | 'n')('U' | 'u')('L' | 'l')('L' | 'l') ;
 CONTAINS : ('C' | 'c')('O' | 'o')('N' | 'n')('T' | 't')('A' | 'a')('I' | 'i')('N' | 'n')('S' | 's') ;
 MATCHES : ('M' | 'm')('A' | 'a')('T' | 't')('C' | 'c')('H' | 'h')('S'| 's') ;
@@ -21,7 +20,6 @@ AND : ('A' | 'a')('N' |'n')('D' | 'd') ;
 OR : ('O' |'o')('R' | 'r') ;
 
 BOOLEAN : TRUE | FALSE ;
-
 
 TRUE : ('T' | 't')('R' | 'r')('U' | 'u')('E' | 'e') ;
 FALSE : ('F' |'f')('A' |'a')('L' |'l')('S' |'s')('E' |'e') ;
@@ -34,7 +32,7 @@ STARTS : ('S' | 's')('T' | 't')('A' | 'a')('R' | 'r')('T' | 't')('S' |'s') ;
 SINGLEQUOTE : '\'' ;
 DOUBLEQOUTE : '"' ;
 
-ALPHANUMERIC : [a-zA-Z0-9_*$]* ;
+ALPHANUMERIC : [a-zA-Z0-9_*$]+ ;
 
-ESCAPR : [ \t\n\r"]+ -> skip ;
+ESCAPE : [ \t\n\r"]+ -> skip ;
 

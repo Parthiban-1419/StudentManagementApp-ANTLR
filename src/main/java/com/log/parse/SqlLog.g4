@@ -1,12 +1,13 @@
 grammar SqlLog;
 
-sqlLog : dateTime threadId '[' label ']' '[' errorCode ']' '[' subSystem ']' message | EOF;
+sqlLog : dateTime threadId '[' label ']' '[' errorCode ']' '[' subSystem ']' message '[' userName ']' | EOF;
 dateTime : DATE 'T' TIME ;
 threadId : NUMBER ;
 label : 'Warning' | 'Error' | 'Note'  ;
 errorCode : 'MY-' ERRORCODERANGE ;
 subSystem :  STRING ;
 message : (STRING | NUMBER)* ;
+userName : STRING ;
 
 
 ESCAPE : [ \t\n\r]+ -> skip;

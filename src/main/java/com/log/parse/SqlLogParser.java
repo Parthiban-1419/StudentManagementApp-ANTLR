@@ -22,11 +22,11 @@ public class SqlLogParser extends Parser {
 		TIME=16, HOURS=17, MINUTES=18, SECONDS=19, MILLISECONDS=20, ZEROTOSIXTY=21;
 	public static final int
 		RULE_sqlLog = 0, RULE_dateTime = 1, RULE_threadId = 2, RULE_label = 3, 
-		RULE_errorCode = 4, RULE_subSystem = 5, RULE_message = 6;
+		RULE_errorCode = 4, RULE_subSystem = 5, RULE_message = 6, RULE_userName = 7;
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"sqlLog", "dateTime", "threadId", "label", "errorCode", "subSystem", 
-			"message"
+			"message", "userName"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -114,6 +114,9 @@ public class SqlLogParser extends Parser {
 		public MessageContext message() {
 			return getRuleContext(MessageContext.class,0);
 		}
+		public UserNameContext userName() {
+			return getRuleContext(UserNameContext.class,0);
+		}
 		public TerminalNode EOF() { return getToken(SqlLogParser.EOF, 0); }
 		public SqlLogContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -138,42 +141,48 @@ public class SqlLogParser extends Parser {
 		SqlLogContext _localctx = new SqlLogContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_sqlLog);
 		try {
-			setState(28);
+			setState(33);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case DATE:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(14);
-				dateTime();
-				setState(15);
-				threadId();
 				setState(16);
-				match(T__0);
+				dateTime();
 				setState(17);
-				label();
+				threadId();
 				setState(18);
-				match(T__1);
+				match(T__0);
 				setState(19);
-				match(T__0);
+				label();
 				setState(20);
-				errorCode();
+				match(T__1);
 				setState(21);
-				match(T__1);
-				setState(22);
 				match(T__0);
+				setState(22);
+				errorCode();
 				setState(23);
-				subSystem();
-				setState(24);
 				match(T__1);
+				setState(24);
+				match(T__0);
 				setState(25);
+				subSystem();
+				setState(26);
+				match(T__1);
+				setState(27);
 				message();
+				setState(28);
+				match(T__0);
+				setState(29);
+				userName();
+				setState(30);
+				match(T__1);
 				}
 				break;
 			case EOF:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(27);
+				setState(32);
 				match(EOF);
 				}
 				break;
@@ -220,11 +229,11 @@ public class SqlLogParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(30);
+			setState(35);
 			match(DATE);
-			setState(31);
+			setState(36);
 			match(T__2);
-			setState(32);
+			setState(37);
 			match(TIME);
 			}
 		}
@@ -266,7 +275,7 @@ public class SqlLogParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(34);
+			setState(39);
 			match(NUMBER);
 			}
 		}
@@ -308,7 +317,7 @@ public class SqlLogParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(36);
+			setState(41);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__4) | (1L << T__5))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -358,9 +367,9 @@ public class SqlLogParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(38);
+			setState(43);
 			match(T__6);
-			setState(39);
+			setState(44);
 			match(ERRORCODERANGE);
 			}
 		}
@@ -402,7 +411,7 @@ public class SqlLogParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(41);
+			setState(46);
 			match(STRING);
 			}
 		}
@@ -452,13 +461,13 @@ public class SqlLogParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(46);
+			setState(51);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==NUMBER || _la==STRING) {
 				{
 				{
-				setState(43);
+				setState(48);
 				_la = _input.LA(1);
 				if ( !(_la==NUMBER || _la==STRING) ) {
 				_errHandler.recoverInline(this);
@@ -470,7 +479,7 @@ public class SqlLogParser extends Parser {
 				}
 				}
 				}
-				setState(48);
+				setState(53);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -487,37 +496,82 @@ public class SqlLogParser extends Parser {
 		return _localctx;
 	}
 
+	public static class UserNameContext extends ParserRuleContext {
+		public TerminalNode STRING() { return getToken(SqlLogParser.STRING, 0); }
+		public UserNameContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_userName; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof SqlLogListener ) ((SqlLogListener)listener).enterUserName(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof SqlLogListener ) ((SqlLogListener)listener).exitUserName(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SqlLogVisitor ) return ((SqlLogVisitor<? extends T>)visitor).visitUserName(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final UserNameContext userName() throws RecognitionException {
+		UserNameContext _localctx = new UserNameContext(_ctx, getState());
+		enterRule(_localctx, 14, RULE_userName);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(54);
+			match(STRING);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
 	public static final String _serializedATN =
-		"\u0004\u0001\u00152\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001\u00159\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
-		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0001\u0000\u0001\u0000\u0001"+
+		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0001"+
 		"\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0001"+
-		"\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0003"+
-		"\u0000\u001d\b\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
-		"\u0002\u0001\u0002\u0001\u0003\u0001\u0003\u0001\u0004\u0001\u0004\u0001"+
-		"\u0004\u0001\u0005\u0001\u0005\u0001\u0006\u0005\u0006-\b\u0006\n\u0006"+
-		"\f\u00060\t\u0006\u0001\u0006\u0000\u0000\u0007\u0000\u0002\u0004\u0006"+
-		"\b\n\f\u0000\u0002\u0001\u0000\u0004\u0006\u0002\u0000\r\r\u000f\u000f"+
-		",\u0000\u001c\u0001\u0000\u0000\u0000\u0002\u001e\u0001\u0000\u0000\u0000"+
-		"\u0004\"\u0001\u0000\u0000\u0000\u0006$\u0001\u0000\u0000\u0000\b&\u0001"+
-		"\u0000\u0000\u0000\n)\u0001\u0000\u0000\u0000\f.\u0001\u0000\u0000\u0000"+
-		"\u000e\u000f\u0003\u0002\u0001\u0000\u000f\u0010\u0003\u0004\u0002\u0000"+
-		"\u0010\u0011\u0005\u0001\u0000\u0000\u0011\u0012\u0003\u0006\u0003\u0000"+
-		"\u0012\u0013\u0005\u0002\u0000\u0000\u0013\u0014\u0005\u0001\u0000\u0000"+
-		"\u0014\u0015\u0003\b\u0004\u0000\u0015\u0016\u0005\u0002\u0000\u0000\u0016"+
-		"\u0017\u0005\u0001\u0000\u0000\u0017\u0018\u0003\n\u0005\u0000\u0018\u0019"+
-		"\u0005\u0002\u0000\u0000\u0019\u001a\u0003\f\u0006\u0000\u001a\u001d\u0001"+
-		"\u0000\u0000\u0000\u001b\u001d\u0005\u0000\u0000\u0001\u001c\u000e\u0001"+
-		"\u0000\u0000\u0000\u001c\u001b\u0001\u0000\u0000\u0000\u001d\u0001\u0001"+
-		"\u0000\u0000\u0000\u001e\u001f\u0005\t\u0000\u0000\u001f \u0005\u0003"+
-		"\u0000\u0000 !\u0005\u0010\u0000\u0000!\u0003\u0001\u0000\u0000\u0000"+
-		"\"#\u0005\r\u0000\u0000#\u0005\u0001\u0000\u0000\u0000$%\u0007\u0000\u0000"+
-		"\u0000%\u0007\u0001\u0000\u0000\u0000&\'\u0005\u0007\u0000\u0000\'(\u0005"+
-		"\u000e\u0000\u0000(\t\u0001\u0000\u0000\u0000)*\u0005\u000f\u0000\u0000"+
-		"*\u000b\u0001\u0000\u0000\u0000+-\u0007\u0001\u0000\u0000,+\u0001\u0000"+
-		"\u0000\u0000-0\u0001\u0000\u0000\u0000.,\u0001\u0000\u0000\u0000./\u0001"+
-		"\u0000\u0000\u0000/\r\u0001\u0000\u0000\u00000.\u0001\u0000\u0000\u0000"+
-		"\u0002\u001c.";
+		"\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0001"+
+		"\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0003\u0000\"\b"+
+		"\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0002\u0001"+
+		"\u0002\u0001\u0003\u0001\u0003\u0001\u0004\u0001\u0004\u0001\u0004\u0001"+
+		"\u0005\u0001\u0005\u0001\u0006\u0005\u00062\b\u0006\n\u0006\f\u00065\t"+
+		"\u0006\u0001\u0007\u0001\u0007\u0001\u0007\u0000\u0000\b\u0000\u0002\u0004"+
+		"\u0006\b\n\f\u000e\u0000\u0002\u0001\u0000\u0004\u0006\u0002\u0000\r\r"+
+		"\u000f\u000f2\u0000!\u0001\u0000\u0000\u0000\u0002#\u0001\u0000\u0000"+
+		"\u0000\u0004\'\u0001\u0000\u0000\u0000\u0006)\u0001\u0000\u0000\u0000"+
+		"\b+\u0001\u0000\u0000\u0000\n.\u0001\u0000\u0000\u0000\f3\u0001\u0000"+
+		"\u0000\u0000\u000e6\u0001\u0000\u0000\u0000\u0010\u0011\u0003\u0002\u0001"+
+		"\u0000\u0011\u0012\u0003\u0004\u0002\u0000\u0012\u0013\u0005\u0001\u0000"+
+		"\u0000\u0013\u0014\u0003\u0006\u0003\u0000\u0014\u0015\u0005\u0002\u0000"+
+		"\u0000\u0015\u0016\u0005\u0001\u0000\u0000\u0016\u0017\u0003\b\u0004\u0000"+
+		"\u0017\u0018\u0005\u0002\u0000\u0000\u0018\u0019\u0005\u0001\u0000\u0000"+
+		"\u0019\u001a\u0003\n\u0005\u0000\u001a\u001b\u0005\u0002\u0000\u0000\u001b"+
+		"\u001c\u0003\f\u0006\u0000\u001c\u001d\u0005\u0001\u0000\u0000\u001d\u001e"+
+		"\u0003\u000e\u0007\u0000\u001e\u001f\u0005\u0002\u0000\u0000\u001f\"\u0001"+
+		"\u0000\u0000\u0000 \"\u0005\u0000\u0000\u0001!\u0010\u0001\u0000\u0000"+
+		"\u0000! \u0001\u0000\u0000\u0000\"\u0001\u0001\u0000\u0000\u0000#$\u0005"+
+		"\t\u0000\u0000$%\u0005\u0003\u0000\u0000%&\u0005\u0010\u0000\u0000&\u0003"+
+		"\u0001\u0000\u0000\u0000\'(\u0005\r\u0000\u0000(\u0005\u0001\u0000\u0000"+
+		"\u0000)*\u0007\u0000\u0000\u0000*\u0007\u0001\u0000\u0000\u0000+,\u0005"+
+		"\u0007\u0000\u0000,-\u0005\u000e\u0000\u0000-\t\u0001\u0000\u0000\u0000"+
+		"./\u0005\u000f\u0000\u0000/\u000b\u0001\u0000\u0000\u000002\u0007\u0001"+
+		"\u0000\u000010\u0001\u0000\u0000\u000025\u0001\u0000\u0000\u000031\u0001"+
+		"\u0000\u0000\u000034\u0001\u0000\u0000\u00004\r\u0001\u0000\u0000\u0000"+
+		"53\u0001\u0000\u0000\u000067\u0005\u000f\u0000\u00007\u000f\u0001\u0000"+
+		"\u0000\u0000\u0002!3";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

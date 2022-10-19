@@ -2,17 +2,16 @@ grammar AntlrQuery ;
 
 antlrQuery : orQuery | EOF ;
 orQuery : andQuery (OR andQuery)* ;
-andQuery : query (AND query)*;
+andQuery : query (AND query)* ;
 query : expression | OPENBRACKET orQuery CLOSEBRACKET ;
-expression : orValue  | field separator orValue | field (orValue);
+expression : orValue  | field separator orValue | field (orValue) ;
 orValue : OPENBRACKET orValue (OR andValue)* CLOSEBRACKET | andValue (OR andValue)* ;
 andValue : value (AND value)* ;
-value : rangeValue | number | VALUE | CONTAINS VALUE;
+value : rangeValue | number | VALUE | CONTAINS VALUE ;
 rangeValue : FROM NUMBER (TO | AND) NUMBER | RANGESTART NUMBER TO NUMBER RANGEEND | (INBETWEEN | BETWEEN) NUMBER (AND | TO) NUMBER ;
 number : NUMBER | (GREATERTHAN | GREATERTHANOREQUAL | LESSTHAN | LESSTHANOREQUAL) NUMBER ;
 separator : NOTEQUAL | EQUAL | NOT  | SEPERATOR ;
 field : STRING ;
-
 
 CONTAINS :  ('C' |'c')('O' | 'o')('N' |'n')('T' | 't')('A' | 'a')('I' | 'i')('N' | 'n')('S' | 's');
 SEPERATOR : 'in' | 'is' | ':' ;

@@ -15,8 +15,6 @@ public class QueryGenerator extends QueryBaseListener{
         MyListener listener = new MyListener();
         QueryParser.QueryContext tree = parser.query();
         ParseTreeWalker.DEFAULT.walk(listener, tree);
-        MyVisitor visitor = new MyVisitor();
-        System.out.println(visitor.visit(tree));
         return listener.result;
     }
 }

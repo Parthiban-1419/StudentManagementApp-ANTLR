@@ -52,4 +52,10 @@ public interface SqlLogVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMessage(SqlLogParser.MessageContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SqlLogParser#userName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUserName(SqlLogParser.UserNameContext ctx);
 }

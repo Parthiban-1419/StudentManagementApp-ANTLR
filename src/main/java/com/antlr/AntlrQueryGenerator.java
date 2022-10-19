@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 public class AntlrQueryGenerator {
     public static void main(String[] args) {
         AntlrQueryGenerator generator = new AntlrQueryGenerator();
-        System.out.println(generator.getAntlrQuery("b = 90 , a = 'li' | a = 'lo'"));
+        System.out.println(generator.getAntlrQuery("b = 90 | a = 'li' | a = 'lo'"));
     }
 
     public String getAntlrQuery(String input) {

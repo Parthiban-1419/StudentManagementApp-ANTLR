@@ -25,7 +25,6 @@ public class AddStudent extends HttpServlet {
 		String regNumber = request.getParameter("number"), name = request.getParameter("name"), gender = request.getParameter("gender"), dob = request.getParameter("dob");
 		
 		try {
-			
 			Persistence pers = (Persistence)BeanUtil.lookup("Persistence");
 			Row r = new Row("StudentDetail");
 			r.set("REG_NUMBER", regNumber);
